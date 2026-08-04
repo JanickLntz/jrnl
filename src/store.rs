@@ -334,7 +334,11 @@ mod tests {
 
         let path = append_entry_in(dir.path(), &entry).unwrap();
         assert!(path.exists());
-        assert!(path.to_string_lossy().ends_with("2025/06/15.md"));
+        assert!(
+            path.ends_with(Path::new("2025").join("06").join("15.md")),
+            "unexpected path: {}",
+            path.display()
+        );
 
         let entries =
             read_day_in(dir.path(), NaiveDate::from_ymd_opt(2025, 6, 15).unwrap()).unwrap();
