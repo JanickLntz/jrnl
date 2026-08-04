@@ -1,0 +1,25 @@
+[package]
+name = "jrnl"
+version = "0.1.0"
+edition = "2021"
+
+description = "A fast and simple CLI journal for the terminal."
+authors = ["JanickLntz <JanickLntz@gmail.com>"]
+repository = "https://github.com/JanickLntz/jrnl"
+license = "MIT"
+keywords = ["cli", "journal", "terminal", "diary"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+chrono = "0.4"
+clap = { version = "4", features = ["derive"] }
+crossterm = "0.29.0"
+directories = "5"
+ratatui = "0.30.2"
+serde = { version = "1", features = ["derive"] }
+serde_yaml_ng = "0.10"
+
+[profile.release]
+strip = true
+opt-level = "z"
+lto = true

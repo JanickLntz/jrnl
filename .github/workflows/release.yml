@@ -1,0 +1,75 @@
+name: Release jrnl
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  # =================================================
+  # JOB 1: Build and upload binaries for different OS
+  # =================================================
+  build:
+    name: Build on ${{ matrix.os }} (${{ matrix.asset_name }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include: 
+          - os: ubuntu-latest
+            bin: jrnl
+            asset_name: jrnl-linux-amd64
+          - os: windows-latest
+            bin: jrnl.exe
+            asset_name: jrnl-windows-amd64.exe
+          - os: macos-13 # Intel Mac
+            bin: jrnl
+            asset_name: jrnl-macos-amd64
+          - os: macos-latest # Apple Silicon (M1/M2/M3)
+            bin: jrnl
+            asset_name: jrnl-macos-aarch64
+    
+    steps:
+      - name: 1. Download source code
+        uses: actions/checkout@v4
+
+      - name: 2. Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: 3. Run tests
+        run: cargo test --release
+
+      - name: 4. Build jrnl
+        run: cargo build --release
+
+      - name: 5. Name the binary
+        shell: bash 
+        run: mv target/release/${{ matrix.bin }} ${{ matrix.asset_name }}
+        
+      - name: 6. Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: ${{ matrix.asset_name }}
+
+  # ============================
+  # JOB 2: Create GitHub Release
+  # ============================
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: build 
+    
+    steps:
+      - name: 1. Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: binaries
+          merge-multiple: true 
+
+      - name: 2. Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: binaries/*
