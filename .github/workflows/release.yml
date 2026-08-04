@@ -24,9 +24,6 @@ jobs:
           - os: windows-latest
             bin: jrnl.exe
             asset_name: jrnl-windows-amd64.exe
-          - os: macos-13 # Intel Mac
-            bin: jrnl
-            asset_name: jrnl-macos-amd64
           - os: macos-latest # Apple Silicon (M1/M2/M3)
             bin: jrnl
             asset_name: jrnl-macos-aarch64
