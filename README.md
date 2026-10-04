@@ -20,7 +20,7 @@
 - **Search** — find entries by keyword across your entire journal
 - **Summary export** — dump a date range as markdown (great for paste into ChatGPT, Claude, etc.)
 - **Plain markdown storage** — entries are `YYYY/MM/DD.md` files with YAML frontmatter, readable by any editor
-- **Cross-platform** — Linux, macOS (Intel & Apple Silicon), Windows
+- **Cross-platform** — Linux, macOS, Windows
 
 ## Installation
 
